@@ -17,7 +17,6 @@ const UserManager = require("../managers/entities/user/user.manager");
 const SchoolManager = require("../managers/entities/school/school.manager");
 const ClassroomManager = require("../managers/entities/classroom/classroom.manager");
 
-
 /**
  * load sharable modules
  * @return modules tree with instance of each module
@@ -75,30 +74,31 @@ module.exports = class ManagersLoader {
     this.managers.classroom = new ClassroomManager(this.injectable);
 
     /*************************************************************************************************/
-    const authStack = new VirtualStack({
-      ...{ preStack: ['__token',  "__device"] },
-      ...this.injectable,
-    });
-    const publicStack = new VirtualStack({
-      ...{ preStack: ["__device"] },
+    // const authStack = new VirtualStack({
+    //   ...{ preStack: ['__token',  "__device"] },
+    //   ...this.injectable,
+    // });
+    // const publicStack = new VirtualStack({
+    //   ...{ preStack: ["__device"] },
+    //   ...this.injectable,
+    // });
+    this.managers.mwsExec = new VirtualStack({
+      ...{ preStack: [ '__token', "__device"] },
       ...this.injectable,
     });
 
     this.managers.userApi = new ApiHandler({
       ...this.injectable,
-      managers: {...this.managers, mwsExec:publicStack},
       ...{ prop: "userExposed" },
     });
 
     this.managers.schoolApi = new ApiHandler({
       ...this.injectable,
-      managers: {...this.managers, mwsExec:authStack},
       ...{ prop: "userExposed" },
     });
 
     this.managers.classroomApi = new ApiHandler({
       ...this.injectable,
-      managers: {...this.managers, mwsExec:publicStack},
       ...{ prop: "userExposed" },
     });
 

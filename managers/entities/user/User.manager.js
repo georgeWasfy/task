@@ -18,8 +18,8 @@ module.exports = class UserManager {
     this.userExposed = ["post=createUser"];
   }
 
-  async createUser({ username, email, password, school }) {
-    const user = { username, email, password, school };
+  async createUser({ username, email, password, school, role }) {
+    const user = { username, email, password, school, role };
 
     // Data validation
     let result = await this.validators.user.createUser(user);

@@ -4,7 +4,8 @@ const createUser = async (user) => {
   const newUser = new UserModel({
     username: user.username,
     email: user.email,
-    school: user.school
+    school: user.school,
+    role: user.role || 'STUDENT'
   });
 
   var hashedPassword = await newUser.createHash(user.password);
@@ -12,7 +13,6 @@ const createUser = async (user) => {
 
   // Save newUser object to database
   const doc = await newUser.save();
-  // const doc = await UserModel.create(user);
   return doc;
 };
 
