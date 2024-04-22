@@ -18,18 +18,18 @@ module.exports = class UserManager {
     this.userExposed = ["post=createUser"];
   }
 
-  async createUser({ username, email, password }) {
-    const user = { username, email, password };
+  async createUser({ username, email, password, school }) {
+    const user = { username, email, password, school };
 
     // Data validation
     let result = await this.validators.user.createUser(user);
     if (result) return result;
 
     // Creation Logic
-    let createdUser = await createUser({ username, email, password });
+    let createdUser = await createUser(user);
     let longToken = this.tokenManager.genLongToken({
       userId: createdUser._id,
-      userKey: createdUser.key,
+      userKey: createdUser.role,
     });
 
     // Response

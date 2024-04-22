@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const validateEmail = function (email) {
   var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return re.test(email);
@@ -19,7 +21,7 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 30,
+    maxlength: 300,
   },
   email: {
     type: String,
@@ -40,6 +42,18 @@ const usersSchema = new mongoose.Schema({
   },
   school: {type: mongoose.Types.ObjectId, ref: "schools"}
 });
+
+// Method to generate a hash from plain text
+usersSchema.methods.createHash = async function (plainTextPassword) {
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  return await bcrypt.hash(plainTextPassword, salt);
+};
+
+// Validating the candidate password with stored hash and hash function
+usersSchema.methods.validatePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password_hash);
+};
 
 // Create a Mongoose model based on the schema
 const UserModel = mongoose.model("users", usersSchema);
