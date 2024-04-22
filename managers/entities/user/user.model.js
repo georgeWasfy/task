@@ -38,6 +38,7 @@ const usersSchema = new mongoose.Schema({
     type: String,
     maxlength: 11,
     unique: true,
+    required: true
   },
   school: {type: mongoose.Types.ObjectId, ref: "schools"}
 });

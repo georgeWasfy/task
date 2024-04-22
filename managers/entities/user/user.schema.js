@@ -1,7 +1,7 @@
 
 
 module.exports = {
-    createUser: [
+    create: [
         {
             model: 'username',
             required: true,
@@ -25,6 +25,12 @@ module.exports = {
             required: true,
             path: 'role',
             label: 'role'
+        },
+        {
+            model: 'phoneNumber',
+            required: true,
+            path: 'phoneNumber',
+            label: 'phoneNumber'
         },
     ],
 }

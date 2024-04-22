@@ -1,4 +1,9 @@
-const { create } = require("./student.service");
+const {
+  createStudent,
+  updateStudent,
+  deleteStudent,
+  getAllStudents,
+} = require("./student.service");
 
 module.exports = class StudentManager {
   constructor({
@@ -15,21 +20,73 @@ module.exports = class StudentManager {
     this.validators = validators;
     this.mongomodels = mongomodels;
     this.tokenManager = managers.token;
-    this.userExposed = ["post=create"];
+    this.userExposed = [
+      "post=create",
+      "patch=update",
+      "delete=delete",
+      "get=get",
+    ];
   }
 
-  async create({ name, email, school }) {
+  async create({ name, email, school, ...rest }) {
+    const token = rest.__token;
+    const adminId = token.userId;
     const student = { name, email, school };
 
     // Data validation
-    let result = await this.validators.user.create(student);
+    let result = await this.validators.student.create(student);
     if (result) return result;
 
     // Creation Logic
-    let createdStudent = await create(user);
+    let createdStudent = await createStudent(adminId, student);
     // Response
     return {
       student: createdStudent,
+    };
+  }
+
+  async update({ name, email, school, ...rest }) {
+    const query = rest.__query;
+    const student = { name, email, school };
+    const token = rest.__token;
+    const adminId = token.userId;
+    if (!query.id) {
+      throw new Error("Student Id must be provided");
+    }
+    // Data validation
+    let result = await this.validators.student.update(student);
+    if (result) return result;
+
+    const res = await updateStudent(adminId, query.id, student);
+
+    // Response
+    return {
+      msg: res.msg || "updated succesfully",
+    };
+  }
+
+  async delete(req) {
+    const query = req.__query;
+    const token = req.__token;
+    const adminId = token.userId;
+    if (!query.id) {
+      throw new Error("Student Id must be provided");
+    }
+
+    const deleted = await deleteStudent(adminId, query.id);
+
+    // Response
+    return {
+      msg: deleted.msg || "deleted succesfully",
+    };
+  }
+
+  async get() {
+    let allStudent = await getAllStudents();
+
+    // Response
+    return {
+      studenst: allStudent,
     };
   }
 };

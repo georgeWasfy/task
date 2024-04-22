@@ -16,6 +16,7 @@ const MongoLoader = require("./MongoLoader");
 const UserManager = require("../managers/entities/user/user.manager");
 const SchoolManager = require("../managers/entities/school/school.manager");
 const ClassroomManager = require("../managers/entities/classroom/classroom.manager");
+const StudentManager = require("../managers/entities/student/student.manager");
 
 /**
  * load sharable modules
@@ -72,16 +73,10 @@ module.exports = class ManagersLoader {
     this.managers.user = new UserManager(this.injectable);
     this.managers.school = new SchoolManager(this.injectable);
     this.managers.classroom = new ClassroomManager(this.injectable);
+    this.managers.student = new StudentManager(this.injectable);
 
     /*************************************************************************************************/
-    // const authStack = new VirtualStack({
-    //   ...{ preStack: ['__token',  "__device"] },
-    //   ...this.injectable,
-    // });
-    // const publicStack = new VirtualStack({
-    //   ...{ preStack: ["__device"] },
-    //   ...this.injectable,
-    // });
+
     this.managers.mwsExec = new VirtualStack({
       ...{ preStack: [ '__token',"__query", "__device"] },
       ...this.injectable,
@@ -98,6 +93,11 @@ module.exports = class ManagersLoader {
     });
 
     this.managers.classroomApi = new ApiHandler({
+      ...this.injectable,
+      ...{ prop: "userExposed" },
+    });
+
+    this.managers.studentApi = new ApiHandler({
       ...this.injectable,
       ...{ prop: "userExposed" },
     });

@@ -18,11 +18,11 @@ module.exports = class UserManager {
     this.userExposed = ["post=signup"];
   }
 
-  async signup({ username, email, password, school, role }) {
-    const user = { username, email, password, school, role };
+  async signup({ username, email, password, school, role, phoneNumber }) {
+    const user = { username, email, password, school, role, phoneNumber };
 
     // Data validation
-    let result = await this.validators.user.createUser(user);
+    let result = await this.validators.user.create(user);
     if (result) return result;
 
     // Creation Logic

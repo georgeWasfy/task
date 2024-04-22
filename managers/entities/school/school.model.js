@@ -16,8 +16,7 @@ const schoolsSchema = new mongoose.Schema({
   phoneNumber: {
     type: String,
     maxlength: 11,
-    required: true,
-    unique: true,
+    required: false,
   },
   noOfClassrooms: {
     type: Number,

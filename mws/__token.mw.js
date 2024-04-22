@@ -5,7 +5,7 @@ module.exports = ({ meta, config, managers }) => {
   const isAdmin = (role) => {
     return role === "ADMIN";
   };
-    return ({ req, res, next }) => {
+  return ({ req, res, next }) => {
     if (req.params.moduleName === "user") {
       return next();
     }
@@ -37,11 +37,15 @@ module.exports = ({ meta, config, managers }) => {
       });
     }
     switch (req.params.moduleName) {
-        case "school":
+      case "school":
         if (isSuperAdmin(decoded.userKey)) {
           return next(decoded);
         }
       case "classroom":
+        if (isAdmin(decoded.userKey)) {
+          return next(decoded);
+        }
+      case "student":
         if (isAdmin(decoded.userKey)) {
           return next(decoded);
         }
