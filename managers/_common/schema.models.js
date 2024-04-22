@@ -138,4 +138,8 @@ module.exports = {
     path: "school",
     type: "string",
   },
+  role: {
+    path: "role",
+    type: "string",
+  },
 };

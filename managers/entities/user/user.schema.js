@@ -19,6 +19,12 @@ module.exports = {
             required: true,
             path: 'password',
             label: 'password'
+        }, 
+        {
+            model: 'role',
+            required: true,
+            path: 'role',
+            label: 'role'
         },
     ],
 }

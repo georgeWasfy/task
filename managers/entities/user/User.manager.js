@@ -15,10 +15,10 @@ module.exports = class UserManager {
     this.validators = validators;
     this.mongomodels = mongomodels;
     this.tokenManager = managers.token;
-    this.userExposed = ["post=createUser"];
+    this.userExposed = ["post=signup", "post=login"];
   }
 
-  async createUser({ username, email, password, school, role }) {
+  async signup({ username, email, password, school, role }) {
     const user = { username, email, password, school, role };
 
     // Data validation

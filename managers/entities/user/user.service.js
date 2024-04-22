@@ -5,7 +5,7 @@ const createUser = async (user) => {
     username: user.username,
     email: user.email,
     school: user.school,
-    role: user.role || 'STUDENT'
+    role: user.role,
   });
 
   var hashedPassword = await newUser.createHash(user.password);
