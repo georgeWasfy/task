@@ -75,22 +75,34 @@ module.exports = class ManagersLoader {
     this.managers.classroom = new ClassroomManager(this.injectable);
 
     /*************************************************************************************************/
-    this.managers.mwsExec = new VirtualStack({
-      ...{ preStack: [/* '__token', */ "__device"] },
+    const authStack = new VirtualStack({
+      ...{ preStack: ['__token',  "__device"] },
       ...this.injectable,
     });
+    const publicStack = new VirtualStack({
+      ...{ preStack: ["__device"] },
+      ...this.injectable,
+    });
+
     this.managers.userApi = new ApiHandler({
       ...this.injectable,
+      managers: {...this.managers, mwsExec:publicStack},
       ...{ prop: "userExposed" },
     });
+
     this.managers.schoolApi = new ApiHandler({
       ...this.injectable,
+      managers: {...this.managers, mwsExec:authStack},
       ...{ prop: "userExposed" },
     });
+
     this.managers.classroomApi = new ApiHandler({
       ...this.injectable,
+      managers: {...this.managers, mwsExec:publicStack},
       ...{ prop: "userExposed" },
     });
+
+    /******************************************INITIALIZE SERVER*******************************************************/
     this.managers.userServer = new UserServer({
       config: this.config,
       managers: this.managers,
