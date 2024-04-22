@@ -15,7 +15,6 @@ module.exports = class UserManager {
     this.validators = validators;
     this.mongomodels = mongomodels;
     this.tokenManager = managers.token;
-    // this.usersCollection = "users";
     this.userExposed = ["post=createUser"];
   }
 

@@ -1,6 +1,6 @@
-const { createSchool } = require("./school.service");
+const { createClassroom } = require("./classroom.service");
 
-module.exports = class SchoolManager {
+module.exports = class ClassroomManager {
   constructor({
     utils,
     cache,
@@ -18,19 +18,19 @@ module.exports = class SchoolManager {
     this.userExposed = ["post=create"];
   }
 
-  async create({ name, address, phoneNumber, noOfClassrooms }) {
-    const school = { name, address, phoneNumber, noOfClassrooms };
+  async create({ name, capacity, school, students }) {
+    const classroom = { name, capacity, school, students  };
 
     // Data validation
-    let result = await this.validators.school.create(school);
+    let result = await this.validators.classroom.create(classroom);
     if (result) return result;
 
     // Creation Logic
-    let createdSchool = await createSchool(school);
+    let createdClassroom = await createClassroom(classroom);
 
     // Response
     return {
-      school: createdSchool,
+      classroom: createdClassroom,
     };
   }
 };
