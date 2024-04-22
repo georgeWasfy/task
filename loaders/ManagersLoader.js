@@ -83,7 +83,7 @@ module.exports = class ManagersLoader {
     //   ...this.injectable,
     // });
     this.managers.mwsExec = new VirtualStack({
-      ...{ preStack: [ '__token', "__device"] },
+      ...{ preStack: [ '__token',"__query", "__device"] },
       ...this.injectable,
     });
 

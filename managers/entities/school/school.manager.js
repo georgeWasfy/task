@@ -1,4 +1,9 @@
-const { createSchool } = require("./school.service");
+const {
+  createSchool,
+  updateSchool,
+  deleteSchool,
+  getAllSchools,
+} = require("./school.service");
 
 module.exports = class SchoolManager {
   constructor({
@@ -15,7 +20,12 @@ module.exports = class SchoolManager {
     this.validators = validators;
     this.mongomodels = mongomodels;
     this.tokenManager = managers.token;
-    this.userExposed = ["post=create"];
+    this.userExposed = [
+      "post=create",
+      "patch=update",
+      "delete=delete",
+      "get=get",
+    ];
   }
 
   async create({ name, address, phoneNumber, noOfClassrooms }) {
@@ -31,6 +41,47 @@ module.exports = class SchoolManager {
     // Response
     return {
       school: createdSchool,
+    };
+  }
+
+  async update({ name, address, phoneNumber, noOfClassrooms, ...rest }) {
+    const query = rest.__query;
+    const school = { name, address, phoneNumber, noOfClassrooms };
+    if (!query.id) {
+      throw new Error("School Id must be provided");
+    }
+    // Data validation
+    let result = await this.validators.school.update(school);
+    if (result) return result;
+
+    await updateSchool(query.id, school);
+
+    // Response
+    return {
+      msg: "updated succesfully",
+    };
+  }
+
+  async delete(req) {
+    const query = req.__query;
+    if (!query.id) {
+      throw new Error("School Id must be provided");
+    }
+
+    await deleteSchool(query.id);
+
+    // Response
+    return {
+      msg: "deleted succesfully",
+    };
+  }
+
+  async get() {
+    let allSchools = await getAllSchools();
+
+    // Response
+    return {
+      schools: allSchools,
     };
   }
 };

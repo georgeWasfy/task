@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
 const validateEmail = function (email) {
   var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -28,7 +27,7 @@ const studentsSchema = new mongoose.Schema({
 });
 
 // Create a Mongoose model based on the schema
-const StudentModel = mongoose.model("students", usersSchema);
+const StudentModel = mongoose.model("students", studentsSchema);
 
 // Export the model for use in your application
 module.exports = StudentModel;
