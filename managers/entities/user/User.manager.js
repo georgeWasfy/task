@@ -1,4 +1,4 @@
-const { createUser } = require("./user.service");
+const { createUser, loginUser } = require("./user.service");
 
 module.exports = class UserManager {
   constructor({
@@ -15,7 +15,7 @@ module.exports = class UserManager {
     this.validators = validators;
     this.mongomodels = mongomodels;
     this.tokenManager = managers.token;
-    this.userExposed = ["post=signup"];
+    this.userExposed = ["post=signup", "post=login"];
   }
 
   async signup({ username, email, password, school, role, phoneNumber }) {
@@ -35,6 +35,32 @@ module.exports = class UserManager {
     // Response
     return {
       user: createdUser,
+      longToken,
+    };
+  }
+
+  async login({ email, password }) {
+    const user = { email, password };
+
+    // Data validation
+    let result = await this.validators.user.login(user);
+    if (result) return result;
+
+    // Creation Logic
+    let userFound = await loginUser(user);
+    if (!userFound) {
+      return {
+        msg: "Email or Password incorrect",
+      };
+    }
+    let longToken = this.tokenManager.genLongToken({
+      userId: userFound._id,
+      userKey: userFound.role,
+    });
+
+    // Response
+    return {
+      user: userFound,
       longToken,
     };
   }

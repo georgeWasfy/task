@@ -52,7 +52,7 @@ usersSchema.methods.createHash = async function (plainTextPassword) {
 
 // Validating the candidate password with stored hash and hash function
 usersSchema.methods.validatePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password_hash);
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 // Create a Mongoose model based on the schema
