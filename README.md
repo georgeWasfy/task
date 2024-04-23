@@ -29,11 +29,8 @@
   * * **body**
 		```yaml
 		{
-		"username": "schooladmin2",
 		"email": "test2@gmail.com",
 		"password": "test",
-		"role": "ADMIN",
-		"phoneNumber": "111111111111"
 		}
 		```
 ```
