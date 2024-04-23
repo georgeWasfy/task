@@ -17,7 +17,7 @@ const classroomsSchema = new mongoose.Schema({
 
   school: { type: mongoose.Types.ObjectId, ref: "schools" },
 
-  students: [{ type: mongoose.Types.ObjectId, ref: "users" }],
+  students: [{ type: mongoose.Types.ObjectId, ref: "students" }],
 });
 
 module.exports = mongoose.model("classrooms", classroomsSchema);
