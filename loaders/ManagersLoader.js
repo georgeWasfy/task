@@ -13,7 +13,7 @@ const SharkFin = require("../managers/shark_fin/SharkFin.manager");
 const TimeMachine = require("../managers/time_machine/TimeMachine.manager");
 const MongoLoader = require("./MongoLoader");
 
-const UserManager = require("../managers/entities/user/user.manager");
+const UserManager = require("../managers/entities/user/User.manager");
 const SchoolManager = require("../managers/entities/school/school.manager");
 const ClassroomManager = require("../managers/entities/classroom/classroom.manager");
 const StudentManager = require("../managers/entities/student/student.manager");
@@ -60,7 +60,7 @@ module.exports = class ManagersLoader {
 
   load() {
     this.managers.responseDispatcher = new ResponseDispatcher();
-    this.managers.liveDb = new LiveDB(this.injectable);
+    // this.managers.liveDb = new LiveDB(this.injectable);
     const middlewaresLoader = new MiddlewaresLoader(this.injectable);
     const mwsRepo = middlewaresLoader.load();
     const { layers, actions } = systemArch;
